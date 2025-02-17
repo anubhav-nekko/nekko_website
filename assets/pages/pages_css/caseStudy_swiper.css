@@ -1,0 +1,83 @@
+.intro--banner .content {
+  margin-bottom: 1.5rem;
+}
+
+.intro--banner .content .img-gallery {
+  width: 100%;
+  height: 130px;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 25px;
+}
+
+.intro--banner .content .img-gallery img {
+  width: 320px;
+  height: 260px;
+  object-fit: cover;
+  transition: transform 0.4s ease; /* Smooth transition effect */
+}
+
+/* On hover, scale the image */
+.intro--banner .content .img-gallery img:hover {
+  transform: scale(1.2); /* Increases the size by 20% */
+  z-index: 1; /* Ensure the image appears on top */
+}
+
+.intro--banner .content .img-gallery::-webkit-scrollbar {
+  /* width: 50px; */
+  height: 7px;
+}
+.intro--banner .content .img-gallery::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+.intro--banner .content .img-gallery::-webkit-scrollbar-thumb {
+  background-color: rgba(206, 206, 235, 0.58);
+  border-radius: 5px;
+  width: 20px;
+  height: 20px;
+}
+.intro--banner .content .img-gallery.img-gallery::-webkit-scrollbar:vertical {
+  display: none;
+}
+
+.intro--banner .content-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 9;
+  display: flex;
+  flex-direction: column;
+}
+
+.intro--banner .content-btn button {
+  padding: 0;
+}
+.ai-bot {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+}
+.ai-bot > .img-gallery-ai {
+  display: block;
+  margin: 2rem;
+  width: 40%;
+  height: 200px;
+}
+.ai-bot > .img-gallery-ai > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+.ai-bot > .img-gallery-ai > img:hover {
+  transform: scale(1.1); 
+  z-index: 1; 
+}
+.ai-content{
+  width: 50%;
+}

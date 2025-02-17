@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+<!-- Chatbot CSS -->
+<style>
+  /* Chatbot Bubble */
+  .chatbot-bubble {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background-color: #007bff;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+  }
+  .chatbot-bubble img {
+    width: 30px;
+    height: 30px;
+  }
+  /* Chatbot Window */
+.chatbot-window {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 350px;
+  height: 400px;
+  background-color: #fff; /* White background */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: none;
+  flex-direction: column;
+  z-index: 1000;
+}
+.chatbot-window.active {
+  display: flex;
+}
+.chatbot-header {
+  padding: 10px;
+  background-color: #007bff; /* Blue header background */
+  color: #fff; /* White text for header */
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  text-align: center;
+}
+.chatbot-body {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  background-color: #f9f9f9; /* Light gray background for body */
+  color: #0f0f0f; /* Dark text for body */  
+  display: flex;
+  flex-direction: column;
+}
+/* User message (Align Right) */
+.user-message {
+  align-self: flex-end; /* Push message to the right */
+  background-color: #007bff;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 15px;
+  max-width: 70%;
+  word-wrap: break-word;
+  margin: 5px 0;
+}
+/* Bot message (Align Left) */
+.bot-message {
+  align-self: flex-start; /* Push message to the left */
+  background-color: #e5e5e5;
+  color: black;
+  padding: 8px 12px;
+  border-radius: 15px;
+  max-width: 70%;
+  word-wrap: break-word;
+  margin: 5px 0;
+}
+.chatbot-footer {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+  background-color: #fff; /* White background for footer */
+}
+.chatbot-footer input {
+  flex: 1; /* Makes input take most of the space */
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #333;
+  outline: none;
+}
+.chatbot-footer button {
+  width: 40px;
+  height: 40px;
+  background-color: #007bff; /* Blue send button */
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-left: 8px; /* Space between input and button */
+}
+.chatbot-footer button img {
+  width: 20px;
+  height: 20px;
+  filter: invert(1); /* Makes the icon white */
+}
+</style>
+    <title>Nekko Tech</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="Nekko is an AI Solutions company specializing in building and deploying cutting-edge AI/ML solutions across various industries. We help businesses automate processes, extract valuable insights from data, and manage AI workloads effectively. Our expertise includes GenAI, Computer Vision, Forecasting, and more."> 
+<meta name="keywords" content="AI Solutions, Machine Learning, Artificial Intelligence, GenAI, Computer Vision, Forecasting, AI Services, AI Consulting, Data Science, Deep Learning, AI Development, AI Implementation"> 
+  <meta name="robots" content="index, follow"> 
+    <meta name="author" content="Nekko or Nekkotech Solutions Private Limited" />
+<meta name="google-site-verification" content="YOUR_GOOGLE_SITE_VERIFICATION_CODE"> 
+  <meta name="bing-site-verification" content="YOUR_BING_SITE_VERIFICATION_CODE"> 
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+  </head>
+  <body>
+    <!-- notification for small viewports and landscape oriented smartphones -->
+    <div class="device-notification">
+      <a class="device-notification--logo" href="#0">
+        <img src="assets/img/nekko_logo_white_bg.svg" alt="Nekko.tech" />
+      </a>
+      <p class="device-notification--message">
+        Nekko.tech has so much to offer that we must request you orient your
+        device to portrait or find a larger screen. You won't be disappointed.
+      </p>
+    </div>
+
+    <div class="perspective effect-rotate-left">
+      <div class="container">
+        <div class="outer-nav--return"></div>
+        <div id="viewport" class="l-viewport">
+          <div class="l-wrapper">
+            <header class="header">
+              <a class="header--logo" href="#0">
+                <img
+                  src="assets/img/nekko_logo_ai_simplified.svg"
+                  alt="Nekko.tech" />
+              </a>
+              <button class="header--cta cta">Hire Us</button>
+              <div class="header--nav-toggle">
+                <span></span>
+              </div>
+            </header>
+            <nav class="l-side-nav">
+              <ul class="side-nav">
+                <li class="is-active"><span>Home</span></li>
+                <li><span>Our Solutions</span></li>
+                <li><span>Works</span></li>
+                <li><span>About</span></li>
+                <li><span>Contact</span></li>
+                <li><span>Hire us</span></li>
+              </ul>
+            </nav>
+            <ul class="l-main-content index-page main-content">
+              <li class="l-section section section--is-active">
+                <div class="intro">
+                 <!-- Add this button inside the intro--banner or intro--options section -->
+<div class="intro--banner">
+  <h1>Your Partner in <br />AI Solutions<br /></h1>
+  <button class="cta">
+    <a href="/assets/pages/case_studies.html" class="case-studies-link">
+      Explore our case studies
+      <span>
+        <svg
+          version="1.1"
+          id="Layer_1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          x="0px"
+          y="0px"
+          viewBox="0 0 150 118"
+          style="enable-background: new 0 0 150 118"
+          xml:space="preserve"
+        >
+          <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
+            <path
+              d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z"
+            />
+          </g>
+        </svg>
+      </span>
+      <span class="btn-background"></span>
+    </a>
+  </button>
+  <img src="assets/img/introduction-visual.png" alt="Welcome" />
+</div>
+                  <div class="intro--options">
+                    <a href="/assets/pages/ai_ml.html">
+                      <h3>AI & Machine Learning</h3>
+                      <p>
+                        We can help you build, train and deploy ML models for a
+                        varied number of usecases
+                      </p>
+                    </a>
+                    <a href="/assets/pages/cloud_migratation.html">
+                      <h3>Cloud IT Services</h3>
+                      <p>Migrate your workloads to cloud</p>
+                    </a>
+                    <a href="/assets/pages/cybersecurity.html">
+                      <h3>Cybersecurity Products</h3>
+                      <p>
+                        Secure your IT assets with our EDR/ XDR and email
+                        security porfolio
+                      </p>
+                    </a>
+                  </div>
+                </div>
+              </li>
+              <li class="l-section section">
+                <div class="our-solutions-wrapper">
+                    <h2>Our Solutions</h2>
+                    <div class="solutions-lockup">
+                        <ul class="carousel solutions-carousel">
+                            <li class="solution-item solution-item-left">
+                                <a href="/assets/pages/nexusdms.html">
+                                    <div class="solution-item-image">
+                                        <img src="assets/img/work-metiew-smith.jpeg" alt="Cloud Solutions" />
+                                    </div>
+                                    <p class="solution-item-title">NexusDMS</p>
+                                    <p class="solution-item-description">
+                                        Scalable and secure cloud computing solutions
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="solution-item solution-item-center">
+                                <a href="/assets/pages/nebula.html">
+                                    <div class="solution-item-image">
+                                        <img src="assets/img/NN.jpeg" alt="DevOps Services" />
+                                    </div>
+                                    <p class="solution-item-title">NEKKO Nebula</p>
+                                    <p class="solution-item-description">
+                                        Automate and optimize your software delivery pipeline
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="solution-item solution-item-right">
+                                <a href="/assets/pages/orbiteye.html">
+                                    <div class="solution-item-image">
+                                        <img src="assets/img/OE.jpeg" alt="Data Analytics" />
+                                    </div>
+                                    <p class="solution-item-title">ORBIT EYE</p>
+                                    <p class="solution-item-description">
+                                        Unlock insights with our AI-driven data analytics solutions
+                                    </p>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="carousel-prev">
+                            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                x="0px" y="0px" viewBox="0 0 150 118" style="enable-background: new 0 0 150 118"
+                                xml:space="preserve">
+                                <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
+                                    <path
+                                        d="M561,1169C525,1155,10,640,3,612c-3-13,1-36,8-52c8-15,134-145,281-289C527,41,562,10,590,10c22,0,41,9,61,29
+                                                c55,55,49,64-163,278L296,510h575c564,0,576,0,597,20c46,43,37,109-18,137c-19,10-159,13-590,13l-565,1l182,180
+                                                c101,99,187,188,193,199c16,30,12,57-12,84C631,1174,595,1183,561,1169z" />
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="carousel-next">
+                            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                x="0px" y="0px" viewBox="0 0 150 118" style="enable-background: new 0 0 150 118"
+                                xml:space="preserve">
+                                <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
+                                    <path
+                                        d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z" />
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="l-section section">
+                <div class="work">
+                    <h2>Selected work</h2>
+                    <div class="work--lockup">
+                        <ul class="slider work-slider">
+                            <li class="slider--item slider--item-left">
+                                <a href="/assets/pages/cloud_migratation.html">
+                                    <div class="slider--item-image">
+                                        <img src="assets/img/work-victory.jpg" alt="Cloud Migration" />
+                                    </div>
+                                    <p class="slider--item-title">Cloud IT Services</p>
+                                    <p class="slider--item-description">
+                                        Migrate your workloads to cloud
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="slider--item slider--item-center">
+                                <a href="/assets/pages/ai_ml.html">
+                                    <div class="slider--item-image">
+                                        <img src="assets/img/work-metiew-smith1.jpeg" alt="AI & Machine Learning" />
+                                    </div>
+                                    <p class="slider--item-title">
+                                        AI & Machine Learning
+                                    </p>
+                                    <p class="slider--item-description">
+                                        We can help you build, train and deploy ML models
+                                        for a varied number of use cases
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="slider--item slider--item-right">
+                                <a href="/assets/pages/cybersecurity.html">
+                                    <div class="slider--item-image">
+                                        <img src="assets/img/work-alex-nowak.jpg" alt="Cybersecurity Products" />
+                                    </div>
+                                    <p class="slider--item-title">
+                                        Cybersecurity Products
+                                    </p>
+                                    <p class="slider--item-description">
+                                        Secure your IT assets with our EDR/ XDR and email
+                                        security portfolio
+                                    </p>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="slider--prev">
+                            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                x="0px" y="0px" viewBox="0 0 150 118" style="enable-background: new 0 0 150 118"
+                                xml:space="preserve">
+                                <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
+                                    <path
+                                        d="M561,1169C525,1155,10,640,3,612c-3-13,1-36,8-52c8-15,134-145,281-289C527,41,562,10,590,10c22,0,41,9,61,29
+                                        c55,55,49,64-163,278L296,510h575c564,0,576,0,597,20c46,43,37,109-18,137c-19,10-159,13-590,13l-565,1l182,180
+                                        c101,99,187,188,193,199c16,30,12,57-12,84C631,1174,595,1183,561,1169z" />
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="slider--next">
+                            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                x="0px" y="0px" viewBox="0 0 150 118" style="enable-background: new 0 0 150 118"
+                                xml:space="preserve">
+                                <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
+                                    <path
+                                        d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z" />
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </li>
+              <li class="l-section section">
+  <div class="about">
+    <div class="about--banner">
+      <h2>Technology<br />as a<br />Force Multiplier<br /></h2>
+      <a href="/assets/pages/case_studies.html" class="case-studies-link">
+        Explore Our Case Studies
+        <span>
+          <svg
+            version="1.1"
+            id="Layer_1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            x="0px"
+            y="0px"
+            viewBox="0 0 150 118"
+            style="enable-background: new 0 0 150 118"
+            xml:space="preserve"
+          >
+            <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
+              <path
+                d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z"
+              />
+            </g>
+          </svg>
+        </span>
+      </a>
+      <img src="assets/img/about-visual.png" alt="About Us" />
+    </div>
+    <div class="about--options">
+      <a href="#0">
+        <h3>Our Partners</h3>
+      </a>
+      <a href="#0">
+        <h3>About Us</h3>
+      </a>
+      <a href="#0">
+        <h3>Join Us</h3>
+      </a>
+    </div>
+  </div>
+</li>
+
+        <li class="l-section section">
+            <div class="contact">
+              <div class="contact--lockup">
+                <div class="modal">
+                  <div class="modal--information">
+                    <p>Kokarya Business Synergy Center,<br> No. 51, Old Site No. 1,</br>Fifth Floor, 5th Main,<br>5th 
+                        Block, Jayanagar, Bengaluru -560041</br></p>
+                    <a href="mailto:prithvi@nekko.tech">Email Us: prithvi@nekko.tech</a>
+                    <a href="tel:+91 79807 57702">Call Us: +91 79807 57702</a>
+                  </div>
+                  <ul class="modal--options">
+    <li><a href="https://www.linkedin.com/company/nekko-tech/about/" target="_blank">LinkedIn</a></li>
+    <li><a href="https://wa.me/917980757702" target="_blank">WhatsApp</a></li>
+    <li><a href="https://mail.google.com/mail/?view=cm&fs=1&to=prithvi@nekko.tech" target="_blank">Contact Us</a>
+    </li>
+ </ul>
+
+                </div>
+              </div>
+            </div>
+          </li>
+
+              <li class="l-section section">
+                <div class="hire">
+                  <h2>Get in touch with us</h2>
+                  <!-- checkout formspree.io for easy form setup -->
+                  <form class="work-request" action="send_request.php" method="POST">
+                    <div class="work-request--options">
+                      <span class="options-a">
+                        <input id="opt-1" type="checkbox" value="app design" />
+                        <label for="opt-1">
+                          <svg
+                            version="1.1"
+                            id="Layer_1"
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            x="0px"
+                            y="0px"
+                            viewBox="0 0 150 111"
+                            style="enable-background: new 0 0 150 111"
+                            xml:space="preserve">
+                            <g
+                              transform="translate(0.000000,111.000000) scale(0.100000,-0.100000)">
+                              <path
+                                d="M950,705L555,310L360,505C253,612,160,700,155,700c-6,0-44-34-85-75l-75-75l278-278L550-5l475,475c261,261,475,480,475,485c0,13-132,145-145,145C1349,1100,1167,922,950,705z" />
+                            </g>
+                          </svg>
+                          Application Migration
+                        </label>
+                        <input
+                          id="opt-2"
+                          type="checkbox"
+                          value="application migration" />
+                        <label for="opt-2">
+                          <svg
+                            version="1.1"
+                            id="Layer_1"
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            x="0px"
+                            y="0px"
+                            viewBox="0 0 150 111"
+                            style="enable-background: new 0 0 150 111"
+                            xml:space="preserve">
+                            <g
+                              transform="translate(0.000000,111.000000) scale(0.100000,-0.100000)">
+                              <path
+                                d="M950,705L555,310L360,505C253,612,160,700,155,700c-6,0-44-34-85-75l-75-75l278-278L550-5l475,475c261,261,475,480,475,485c0,13-132,145-145,145C1349,1100,1167,922,950,705z" />
+                            </g>
+                          </svg>
+                          DR Setup On Cloud
+                        </label>
+                        <input
+                          id="opt-3"
+                          type="checkbox"
+                          value=" DR Setup On Cloud" />
+                        <label for="opt-3">
+                          <svg
+                            version="1.1"
+                            id="Layer_1"
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            x="0px"
+                            y="0px"
+                            viewBox="0 0 150 111"
+                            style="enable-background: new 0 0 150 111"
+                            xml:space="preserve">
+                            <g
+                              transform="translate(0.000000,111.000000) scale(0.100000,-0.100000)">
+                              <path
+                                d="M950,705L555,310L360,505C253,612,160,700,155,700c-6,0-44-34-85-75l-75-75l278-278L550-5l475,475c261,261,475,480,475,485c0,13-132,145-145,145C1349,1100,1167,922,950,705z" />
+                            </g>
+                          </svg>
+                          AI / ML usecase
+                        </label>
+                      </span>
+                      <span class="options-b">
+                        <input
+                          id="opt-4"
+                          type="checkbox"
+                          value="AI / ML usecase" />
+                        <label for="opt-4">
+                          <svg
+                            version="1.1"
+                            id="Layer_1"
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            x="0px"
+                            y="0px"
+                            viewBox="0 0 150 111"
+                            style="enable-background: new 0 0 150 111"
+                            xml:space="preserve">
+                            <g
+                              transform="translate(0.000000,111.000000) scale(0.100000,-0.100000)">
+                              <path
+                                d="M950,705L555,310L360,505C253,612,160,700,155,700c-6,0-44-34-85-75l-75-75l278-278L550-5l475,475c261,261,475,480,475,485c0,13-132,145-145,145C1349,1100,1167,922,950,705z" />
+                            </g>
+                          </svg>
+                          App Requirement
+                        </label>
+                        <input
+                          id="opt-5"
+                          type="checkbox"
+                          value="app requirement" />
+                        <label for="opt-5">
+                          <svg
+                            version="1.1"
+                            id="Layer_1"
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            x="0px"
+                            y="0px"
+                            viewBox="0 0 150 111"
+                            style="enable-background: new 0 0 150 111"
+                            xml:space="preserve">
+                            <g
+                              transform="translate(0.000000,111.000000) scale(0.100000,-0.100000)">
+                              <path
+                                d="M950,705L555,310L360,505C253,612,160,700,155,700c-6,0-44-34-85-75l-75-75l278-278L550-5l475,475c261,261,475,480,475,485c0,13-132,145-145,145C1349,1100,1167,922,950,705z" />
+                            </g>
+                          </svg>
+                          Staff Requirement
+                        </label>
+                        <input
+                          id="opt-6"
+                          type="checkbox"
+                          value="staff requirement " />
+                        <label for="opt-6">
+                          <svg
+                            version="1.1"
+                            id="Layer_1"
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            x="0px"
+                            y="0px"
+                            viewBox="0 0 150 111"
+                            style="enable-background: new 0 0 150 111"
+                            xml:space="preserve">
+                            <g
+                              transform="translate(0.000000,111.000000) scale(0.100000,-0.100000)">
+                              <path
+                                d="M950,705L555,310L360,505C253,612,160,700,155,700c-6,0-44-34-85-75l-75-75l278-278L550-5l475,475c261,261,475,480,475,485c0,13-132,145-145,145C1349,1100,1167,922,950,705z" />
+                            </g>
+                          </svg>
+                          Other
+                        </label>
+                      </span>
+                    </div>
+                    <div class="work-request--information">
+                      <div class="information-name">
+                        <input id="name" type="text" spellcheck="false" />
+                        <label for="name">Name</label>
+                      </div>
+                      <div class="information-email">
+                        <input id="email" type="email" spellcheck="false" />
+                        <label for="email">Email</label>
+                      </div>
+                    </div>
+                    <input type="submit" value="Send Request" />
+                  </form>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <ul class="outer-nav">
+        <li class="is-active">Home</li>
+        <li>Works</li>
+        <li>About</li>
+        <li>Contact</li>
+        <li>Hire us</li>
+      </ul>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script>
+      window.jQuery ||
+        document.write(
+          '<script src="assets/js/vendor/jquery-2.2.4.min.js"><\/script>'
+        );
+    </script>
+    <script src="assets/js/functions-min.js"></script>
+
+<!-- Chatbot HTML -->
+<div class="chatbot-bubble" id="chatbotBubble">
+  <img src="assets/img/favicon.ico" alt="Chatbot" />
+</div>
+<div class="chatbot-window" id="chatbotWindow">
+  <div class="chatbot-header">
+    <h3>Chat with Us</h3>
+  </div>
+  <div class="chatbot-body">
+    <p>Hello! How can we help you today?</p>
+  </div>
+  <div class="chatbot-footer">
+    <input type="text" placeholder="Type a message..." id="chatInput" />
+    <button id="sendButton">
+      <img src="assets/img/send.png" alt="Send" />
+    </button>
+  </div>  
+</div>
+<script>
+  // Toggle the chatbot window when the bubble is clicked
+  document.getElementById("chatbotBubble").addEventListener("click", function () {
+    var chatbotWindow = document.getElementById("chatbotWindow");
+    chatbotWindow.classList.toggle("active");
+  });
+
+  // Function to send a message
+  function sendMessage() {
+    const inputField = document.querySelector('.chatbot-footer input');
+    const userInput = inputField.value.trim();
+    if (!userInput) return; // Do nothing if input is empty
+
+    const chatBody = document.querySelector('.chatbot-body');
+
+    // Append user's message to the chat body
+    const userMessageDiv = document.createElement('div');
+    userMessageDiv.className = 'user-message';
+    userMessageDiv.innerText = userInput;
+    chatBody.appendChild(userMessageDiv);
+
+    // Clear the input field
+    inputField.value = '';
+
+    // Show a loading indicator while waiting for the response
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'loading';
+    loadingDiv.innerText = 'Typing...';
+    chatBody.appendChild(loadingDiv);
+
+    // Call your Flask backend using fetch
+    fetch('http://20.51.212.97:5000/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        system_message: 'You are a helpful AI Assistant',
+        user_query: userInput
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Remove the loading indicator
+      loadingDiv.remove();
+
+      if (data.reply) {
+        // Append the bot's reply to the chat body
+        const botMessageDiv = document.createElement('div');
+        botMessageDiv.className = 'bot-message';
+        botMessageDiv.innerText = data.reply;
+        chatBody.appendChild(botMessageDiv);
+      } else {
+        // Show error message
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'bot-message error';
+        errorDiv.innerText = 'Error: ' + (data.error || 'Unknown error');
+        chatBody.appendChild(errorDiv);
+      }
+    })
+    .catch(err => {
+      loadingDiv.remove();
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'bot-message error';
+      errorDiv.innerText = 'Error: ' + err.message;
+      chatBody.appendChild(errorDiv);
+    });
+
+    // Auto-scroll to the latest message
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+
+  // Listen for the Enter key in the input field
+  document.querySelector('.chatbot-footer input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  });
+
+  // Add event listener for the send button
+  document.getElementById("sendButton").addEventListener("click", sendMessage);
+</script>
+
+  </body>
+
+</html>
