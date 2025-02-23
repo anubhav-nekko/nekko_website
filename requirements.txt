@@ -1,5 +1,6 @@
+Flask-Cors
 Flask
-flask-cors
 requests
 azure-ai-formrecognizer
 azure-core
+PyPDF2
