@@ -1,18 +1,11 @@
-# [Global: HTML5 website template](http://buckymaler.com/global)
+Step 0: Initialise Miniconda with: export PATH=~/miniconda3/bin:$PATH
 
-### [Featured on Freebiesbug](http://freebiesbug.com/psd-freebies/global-futuristic-one-page-portfolio-psd-html/)
+Step 1: Update the default file in: /etc/nginx/sites-available/default
 
-Global is a modern and sleek website template crafted for professionals in the creative industry. Global can serve as a single page portfolio or be easily modified to serve as the perfect beginning for a hip creative agency.
+Step 2: Test Config With: sudo nginx -t
 
-The original PSD is included and was provided by [Sergey Melnik](https://www.behance.net/SergeyMelnik).
+Step 3: Reload Nginx server: sudo systemctl reload nginx
 
-This project was developed with HTML5, Sass, jQuery, and Hammer.js.
+Step 4: Clone Repo in /var/www/
 
-Performance basics are covered: assets are minified into single CSS and JS files, and the images are optimized.
-
-[LIVE PREVIEW](http://buckymaler.com/global)
-
-## Misc:
-
-* Follow Bucky: [Twitter](https://twitter.com/BuckyMaler), [GitHub](https://github.com/BuckyMaler)
-* Follow Sergey: [Dribbble](https://dribbble.com/sergeymelnik), [Bēhance](https://www.behance.net/SergeyMelnik)
+Step 5: Install Requirements: pip install -r requirements.txt

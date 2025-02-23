@@ -3,4 +3,3 @@ Flask
 requests
 azure-ai-formrecognizer
 azure-core
-PyPDF2

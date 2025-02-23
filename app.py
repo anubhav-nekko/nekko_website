@@ -3,7 +3,6 @@ from flask_cors import CORS
 import requests, json
 from azure.ai.formrecognizer import DocumentAnalysisClient
 from azure.core.credentials import AzureKeyCredential
-from PyPDF2 import PdfReader
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
