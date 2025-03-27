@@ -51,8 +51,8 @@ def extract_lead_details_from_conversation(conversation):
         return json.loads(answer.split("```")[1].split("```")[0])
 
 # --- File paths and folders ---
-CONV_FOLDER = "~/conversations"
-CONTACTS_FOLDER = "~/contacts"
+CONV_FOLDER = "conversations"
+CONTACTS_FOLDER = "contacts"
 
 if not os.path.exists(CONTACTS_FOLDER):
     os.makedirs(CONTACTS_FOLDER)

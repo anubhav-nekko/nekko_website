@@ -71,13 +71,13 @@ def get_conversation_file():
     # Returns the file path for the current session's conversation.
     if "conversation_file" in session:
         return session["conversation_file"]
-    conv_file = os.path.join("~/conversations", f"chat_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.json")
+    conv_file = os.path.join("conversations", f"chat_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.json")
     session["conversation_file"] = conv_file
     return conv_file
 
 # Ensure conversations folder exists.
-if not os.path.exists("~/conversations"):
-    os.makedirs("~/conversations")
+if not os.path.exists("conversations"):
+    os.makedirs("conversations")
 
 @app.route('/')
 def index():
