@@ -55,6 +55,8 @@ def call_llm_api(conversation_history):
     3. Respond normally if the query is unrelated.
     4. Provide 'prithvi@nekko.tech' if the user asks for the sales team contact.
     5. Engage in a normal conversation.
+
+    Since this is for a chatbot, Please avoid using markdown formatting. Keep your answers short and suitable for a chat environment.
     """
     messages = [{"role": "system", "content": system_message}] + conversation_history
     payload = {  
